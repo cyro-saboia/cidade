@@ -6,7 +6,9 @@ from app.models import User
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    # return redirect(url_for('login')) 
+    return redirect('/login')
+    # return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -18,6 +20,8 @@ def register():
         user = User(name, email, pwd)
         db.session.add(user)
         db.session.commit()
+
+        return redirect('/login')
 
     return render_template('register.html')
 
@@ -32,10 +36,14 @@ def login():
         if not user or not user.verify_password(pwd):
             return redirect(url_for('login'))        
 
+        print('NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN')
         login_user(user)
-        return redirect(url_for('home'))
-
-    return render_template('login.html')
+        print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+        # return redirect(url_for('home'))
+        return render_template('home.html')
+    else:
+        print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP')
+        return render_template('login.html')
 
 
 @app.route('/logout')
